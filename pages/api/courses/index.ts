@@ -27,19 +27,13 @@ export async function getCourses(req: NextApiRequest, res: NextApiResponse) {
 
 export async function createCourse(req: NextApiRequest, res: NextApiResponse) {
   const data = await req.body;
-  const { userId, sessionClaims } = getAuth(req);
+  const { userId } = getAuth(req);
 
   if (!userId) {
     return res.status(401).json({ error: "Unauthorized" });
   }
 
-  const { publicMetadata }: any = sessionClaims;
-  const role = publicMetadata?.role;
-
   try {
-    if (role !== 'admin') {
-      return res.status(401).json({ error: "You're not an admin" });
-    }
     let newCourse = await prisma.course.create({
       data,
     });

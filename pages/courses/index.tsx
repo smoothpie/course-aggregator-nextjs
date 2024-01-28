@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import Sorter from '@/components/Courses/Sorter';
 import Filters from '@/components/Courses/Filters';
@@ -37,18 +36,14 @@ type CoursesProps = {
 const CoursesPage = ({ courses }: CoursesProps) => {
   const [filterValues, setFilterValues] = useState<any>({});
   const [filteredResults, setFilteredResults] = useState<any[]>(courses);
-  const { user } = useUser();
-  const isAdmin = user && (user.publicMetadata?.role === 'admin');
 
   return (
     <div className={s.main}>
       <div className={s.header}>
         <h1>Browse coding courses</h1>
-        {isAdmin && (
-          <Link href="/courses/add">
-            <button>Add new</button>
-          </Link>
-        )}
+        <Link href="/courses/add">
+          <button>Add new</button>
+        </Link>
       </div>
       <div className={s.topBar}>
         <input
@@ -71,7 +66,7 @@ const CoursesPage = ({ courses }: CoursesProps) => {
 
         <div className={s.courses}>
           {filteredResults.map((course) => (
-            <CourseCard key={course.id} course={course} isAdmin={!!isAdmin} />
+            <CourseCard key={course.id} course={course} />
           ))}
         </div>
       </section>

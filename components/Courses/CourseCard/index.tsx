@@ -7,21 +7,18 @@ import s from './CourseCard.module.scss';
 
 type CourseCardProps = {
   course: Course;
-  isAdmin?: boolean;
 }
 
-const CourseCard = ({ course, isAdmin }: CourseCardProps) => {
+const CourseCard = ({ course }: CourseCardProps) => {
   const categoryLabel = categoryOptions.find((option) => option.value === course.category)?.label;
   return (
     <Link href={course.link || "/"} target="_blank">
       <article className={s.courseContainer}>
-        {isAdmin && (
-          <div className={s.adminToolbar}>
-            <Link href={`/courses/${course.id}/edit`}>
-              <Image src="/edit.svg" alt="edit" width={20} height={20} />
-            </Link>
-          </div>
-        )}
+        <div className={s.adminToolbar}>
+          <Link href={`/courses/${course.id}/edit`}>
+            <Image src="/edit.svg" alt="edit" width={20} height={20} />
+          </Link>
+        </div>
         <div className={s.course}>
           <h3>{course.title}</h3>
           <p>{course.description ? shortenDescription(course.description) : '-'}</p>

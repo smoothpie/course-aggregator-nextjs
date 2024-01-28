@@ -33,19 +33,13 @@ export async function editCourse(req: NextApiRequest, res: NextApiResponse) {
   const data = await req.body;
   const courseId = req.query.id as string;
 
-  const { userId, sessionClaims } = getAuth(req);
+  const { userId } = getAuth(req);
 
   if (!userId) {
     return res.status(401).json({ error: "Unauthorized" });
   }
-
-  const { publicMetadata }: any = sessionClaims;
-  const role = publicMetadata?.role;
   
   try {
-    if (role !== 'admin') {
-      return res.status(401).json({ error: "You're not an admin" });
-    }
     const editedCourse = await prisma.course.update({
       where: { id: courseId },
       data,
@@ -59,17 +53,10 @@ export async function editCourse(req: NextApiRequest, res: NextApiResponse) {
 
 export async function deleteCourse(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const { userId, sessionClaims } = getAuth(req);
-
-    const { publicMetadata }: any = sessionClaims;
-    const role = publicMetadata?.role;
+    const { userId } = getAuth(req);
 
     if (!userId) {
       return res.status(401).json({ error: "Unauthorized" });
-    }
-
-    if (role !== 'admin') {
-      return res.status(401).json({ error: "You're not an admin" });
     }
 
     const courseId = req.query.id as string;
